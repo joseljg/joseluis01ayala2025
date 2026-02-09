@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import joseluis.ayala.joseluis01ayala2025.clases.AppDatabase;
 import joseluis.ayala.joseluis01ayala2025.clases.Articulo;
 
 public class InsertEditArticuloActivity extends AppCompatActivity {
@@ -79,6 +80,17 @@ public class InsertEditArticuloActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Error al guardar", Toast.LENGTH_SHORT).show();
+                })
+                .addOnSuccessListener(aVoid -> {
+
+                    AppDatabase.getInstance(this)
+                            .articuloDao()
+                            .insert(articulo);
+
+                    Toast.makeText(this,
+                            esEdicion ? "Artículo actualizado" : "Artículo insertado",
+                            Toast.LENGTH_SHORT).show();
+                    finish();
                 });
     }
 }

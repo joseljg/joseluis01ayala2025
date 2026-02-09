@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import joseluis.ayala.joseluis01ayala2025.clases.AppDatabase;
 import joseluis.ayala.joseluis01ayala2025.clases.Articulo;
 
 public class CrudArticulos extends AppCompatActivity {
@@ -72,22 +73,39 @@ public class CrudArticulos extends AppCompatActivity {
     }
 
     private void cargarArticulos() {
+
+        AppDatabase roomDb = AppDatabase.getInstance(this);
+
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                 listaCompleta.clear();
+
                 for (DataSnapshot ds : snapshot.getChildren()) {
-                    listaCompleta.add(ds.getValue(Articulo.class));
+                    Articulo a = ds.getValue(Articulo.class);
+                    listaCompleta.add(a);
                 }
 
-                // Siempre actualizamos la lista mostrada
+                // 🔥 GUARDAMOS EN ROOM
+                roomDb.articuloDao().deleteAll();
+                roomDb.articuloDao().insertAll(listaCompleta);
+
                 lista.clear();
                 lista.addAll(listaCompleta);
                 adapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
+            public void onCancelled(@NonNull DatabaseError error) {
+                // ❌ Firebase falló → CARGAMOS ROOM
+                listaCompleta.clear();
+                listaCompleta.addAll(roomDb.articuloDao().getAll());
+
+                lista.clear();
+                lista.addAll(listaCompleta);
+                adapter.notifyDataSetChanged();
+            }
         });
     }
 

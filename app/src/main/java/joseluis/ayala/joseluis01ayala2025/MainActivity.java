@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
-            tvStatus.setText("");
+            tvStatus.setText("Debes loguearte");
         }
     }
 }

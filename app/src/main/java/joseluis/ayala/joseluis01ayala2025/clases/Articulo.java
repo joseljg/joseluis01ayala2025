@@ -2,8 +2,15 @@ package joseluis.ayala.joseluis01ayala2025.clases;
 
 import java.io.Serializable;
 import java.util.Objects;
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+
+@Entity(tableName = "articulos")
 public class Articulo implements Serializable {
+    @PrimaryKey
+    @NonNull
     private String codigo;
     private String nombre;
     private double precio;

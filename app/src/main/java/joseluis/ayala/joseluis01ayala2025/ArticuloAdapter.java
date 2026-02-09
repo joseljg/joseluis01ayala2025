@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
+import joseluis.ayala.joseluis01ayala2025.clases.AppDatabase;
 import joseluis.ayala.joseluis01ayala2025.clases.Articulo;
 
 public class ArticuloAdapter extends RecyclerView.Adapter<ArticuloAdapter.ViewHolder> {
@@ -57,7 +58,12 @@ public class ArticuloAdapter extends RecyclerView.Adapter<ArticuloAdapter.ViewHo
                     .setTitle("Eliminar")
                     .setMessage("¿Seguro que quieres borrar este artículo?")
                     .setPositiveButton("Sí", (dialog, which) -> {
-                        db.child(a.getCodigo()).removeValue();
+                       db.child(a.getCodigo()).removeValue()
+                                .addOnSuccessListener(unused -> {
+                                    AppDatabase.getInstance(v.getContext())
+                                            .articuloDao()
+                                            .delete(a);
+                                });
                     })
                     .setNegativeButton("No", null)
                     .show();
